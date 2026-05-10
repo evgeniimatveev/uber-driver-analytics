@@ -14,14 +14,28 @@ load_dotenv()
 _engine = None
 
 
+def _get_db_url() -> str:
+    # Streamlit Cloud: reads from st.secrets
+    try:
+        import streamlit as st
+        s = st.secrets["database"]
+        return (
+            f"postgresql+psycopg2://{s['user']}:{s['password']}"
+            f"@{s['host']}:{s['port']}/{s['dbname']}"
+        )
+    except Exception:
+        pass
+    # Local: reads from .env
+    return (
+        f"postgresql+psycopg2://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+        f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+    )
+
+
 def get_engine():
     global _engine
     if _engine is None:
-        url = (
-            f"postgresql+psycopg2://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-            f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-        )
-        _engine = create_engine(url)
+        _engine = create_engine(_get_db_url())
     return _engine
 
 

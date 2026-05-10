@@ -115,7 +115,7 @@ if page == "Overview":
             "Gross ($)": "${:,.2f}",
             "Avg Fare ($)": "${:.2f}",
             "$/Hour": "${:.2f}",
-        }).background_gradient(subset=["$/Hour"], cmap="Greens"),
+        }),
         use_container_width=True,
         hide_index=True,
     )

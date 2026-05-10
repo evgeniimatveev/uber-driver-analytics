@@ -25,3 +25,6 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Streamlit secrets (real credentials — never commit)
+.streamlit/secrets.toml
