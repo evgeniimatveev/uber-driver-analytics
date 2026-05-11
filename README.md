@@ -10,7 +10,7 @@ Real-world analytics built on **3 years of personal Uber driver data** — 3,448
 
 > "I analyzed my own business to find where the real money was."
 
-**[Live Demo →](https://uber-driver-analytics.streamlit.app)**
+**[Live Demo →](https://evgeniimatveev--uber-driver-analytics-dashboardapp-b7whst.streamlit.app/)**
 
 ---
 
