@@ -1,0 +1,21 @@
+name: Keepalive Ping
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # every 30 minutes
+  workflow_dispatch:           # manual trigger from GitHub UI
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit app
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            https://evgeniimatveev--uber-driver-analytics-dashboardapp-b7whst.streamlit.app/)
+          echo "HTTP status: $STATUS"
+          if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 400 ]; then
+            echo "App is alive"
+          else
+            echo "Warning: unexpected status $STATUS"
+          fi
