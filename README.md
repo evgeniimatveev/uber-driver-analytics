@@ -16,13 +16,33 @@ Real-world analytics built on **3 years of personal Uber driver data** — 3,448
 
 ## Screenshots
 
+<details>
+<summary>📊 Overview — KPI Cards & Year-over-Year</summary>
+
 ![Overview](assets/overview.png)
+
+</details>
+
+<details>
+<summary>💰 Earnings — Monthly Timeline & Commission Breakdown</summary>
 
 ![Earnings](assets/earnings.png)
 
+</details>
+
+<details>
+<summary>🗺️ Trips — Heatmap, Distance & Surge Analysis</summary>
+
 ![Trips](assets/trips.png)
 
+</details>
+
+<details>
+<summary>⭐ Ratings & Tips — Distribution & Tips by Year</summary>
+
 ![Ratings & Tips](assets/ratings.png)
+
+</details>
 
 ---
 
