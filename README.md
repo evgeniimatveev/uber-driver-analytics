@@ -1,10 +1,28 @@
 # Uber Driver Analytics Dashboard
 
-Real-world analytics built on **3 years of personal Uber driver data** — 3,451 trips across Los Angeles (2022–2025). PostgreSQL + Streamlit + Plotly.
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.57-FF4B4B?logo=streamlit&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+![Plotly](https://img.shields.io/badge/Plotly-6.7-3F4F75?logo=plotly&logoColor=white)
+
+Real-world analytics built on **3 years of personal Uber driver data** — 3,448 completed trips across Los Angeles (2022–2025).
 
 > "I analyzed my own business to find where the real money was."
 
 **[Live Demo →](https://uber-driver-analytics.streamlit.app)**
+
+---
+
+## Screenshots
+
+![Overview](assets/overview.png)
+
+![Earnings](assets/earnings.png)
+
+![Trips](assets/trips.png)
+
+![Ratings & Tips](assets/ratings.png)
 
 ---
 
@@ -14,12 +32,14 @@ Real-world analytics built on **3 years of personal Uber driver data** — 3,451
 |--------|-------|
 | Total gross earned | **$70,768** |
 | Net after Uber commission | **$39,445** |
-| Uber commission rate | **32.3%** |
-| Avg earnings per hour | **$87/hr** |
-| 5-star rating rate | **98.9%** |
+| Uber commission rate | **32.3%** of gross |
+| Avg earnings per hour | **$87/hr** gross |
 | Best trip type ($/hr) | Short trips 0–2 mi → **$118/hr** |
+| 5-star rating rate | **98.9%** (1,669 ratings) |
+| Surge bonus earned | **$1,531** across 231 trips (6.7%) |
 | Best single day | Oct 28 2023 (Halloween eve) → **$418** |
-| Surge bonus earned | **$1,531** across 231 surge trips |
+| $/hr growth 2022→2025 | **$68 → $105** (+54%) |
+| Incentives vs commission | Uber took $14,303 · paid back $6,362 (44%) |
 
 ---
 
@@ -28,43 +48,11 @@ Real-world analytics built on **3 years of personal Uber driver data** — 3,451
 | Layer | Tool |
 |-------|------|
 | Data source | Uber driver CSV export (personal) |
-| Database | PostgreSQL (local) / Supabase (cloud) |
-| Ingestion | Python + pandas + SQLAlchemy |
+| Database | Supabase (PostgreSQL cloud) |
+| Ingestion | Python + pandas + REST API |
 | Dashboard | Streamlit + Plotly |
+| Containerization | Docker + Docker Compose |
 | Deployment | Streamlit Cloud |
-
----
-
-## Project Structure
-
-```
-uber-driver-analytics/
-├── data/                  # CSVs here (gitignored — personal data)
-├── sql/
-│   ├── schema.sql         # PostgreSQL table definitions
-│   └── analysis/          # 12 analytical SQL scripts
-│       ├── 01_earnings_by_year.sql
-│       ├── 02_earnings_per_hour.sql
-│       ├── 03_payments_breakdown.sql
-│       ├── 04_uber_commission_rate.sql
-│       ├── 05_airport_vs_regular.sql
-│       ├── 06_best_hours.sql
-│       ├── 07_heatmap_hour_x_day.sql
-│       ├── 08_surge_analysis.sql
-│       ├── 09_monthly_trend.sql
-│       ├── 10_ratings_distribution.sql
-│       ├── 11_best_earning_days.sql
-│       └── 12_trip_distance_buckets.sql
-├── ingestion/
-│   └── load_data.py       # CSV → PostgreSQL pipeline
-├── dashboard/
-│   ├── app.py             # Streamlit app (4 pages)
-│   └── db.py              # SQL query layer
-├── .streamlit/
-│   └── secrets.toml.example
-├── requirements.txt
-└── .env.example
-```
 
 ---
 
@@ -80,35 +68,80 @@ uber-driver-analytics/
 
 ---
 
-## Run Locally
+## Quick Start
+
+### Option A — Docker (recommended)
 
 ```bash
-# 1. Clone
+git clone https://github.com/evgenii-matveev/uber-driver-analytics.git
+cd uber-driver-analytics
+cp .env.example .env        # fill in your Supabase credentials
+docker compose up
+```
+Open **http://localhost:8501**
+
+### Option B — Python
+
+```bash
 git clone https://github.com/evgenii-matveev/uber-driver-analytics.git
 cd uber-driver-analytics
 
-# 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Configure database
-cp .env.example .env
-# Edit .env with your PostgreSQL credentials
+cp .env.example .env        # fill in your Supabase credentials
 
-# 4. Add your Uber CSV export to data/
-# Request at: https://help.uber.com/driving-and-delivering/article/request-your-data
-
-# 5. Create DB schema and load data
-python ingestion/load_data.py
-
-# 6. Run dashboard
 python -m streamlit run dashboard/app.py
 ```
 
 ---
 
-## Data Schema
+## Load Your Own Data
 
-Three tables loaded from Uber's CSV export:
+To run this with your own Uber export:
+
+1. **Request your data** at [Uber Help → Request Your Data](https://help.uber.com/driving-and-delivering/article/request-your-data)
+2. **Place CSVs** in `data/` folder:
+   - `driver_lifetime_trips.csv`
+   - `driver_payments.csv`
+   - `driver_lifetime_ratings_received.csv`
+3. **Create a free Supabase project** at [supabase.com](https://supabase.com)
+4. **Run schema** — paste `sql/schema.sql` into Supabase SQL Editor and execute
+5. **Load data:**
+   ```bash
+   python ingestion/load_supabase.py
+   ```
+6. **Launch dashboard:**
+   ```bash
+   python -m streamlit run dashboard/app.py
+   ```
+
+---
+
+## Project Structure
+
+```
+uber-driver-analytics/
+├── data/                    # CSVs here (gitignored — personal data)
+├── sql/
+│   ├── schema.sql           # PostgreSQL table definitions
+│   └── analysis/            # 12 analytical SQL scripts
+├── ingestion/
+│   ├── load_data.py         # CSV → local PostgreSQL pipeline
+│   └── load_supabase.py     # CSV → Supabase via REST API
+├── dashboard/
+│   ├── app.py               # Streamlit app (4 pages)
+│   └── db.py                # SQL query layer
+├── .streamlit/
+│   └── secrets.toml.example
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── .env.example
+```
+
+---
+
+## Data Schema
 
 | Table | Rows | Description |
 |-------|------|-------------|
@@ -136,7 +169,7 @@ Three tables loaded from Uber's CSV export:
 - **Data Engineering** — CSV ingestion pipeline, schema design, indexing strategy
 - **Analytics** — cohort analysis (year-over-year), segmentation (distance buckets, surge/regular)
 - **Visualization** — Streamlit multi-page app, Plotly heatmaps, area charts, donut charts
-- **Deployment** — Streamlit Cloud, Supabase (PostgreSQL as a service), environment secrets
+- **DevOps** — Docker containerization, Supabase cloud DB, environment secrets management
 
 ---
 

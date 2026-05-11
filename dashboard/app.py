@@ -116,7 +116,7 @@ if page == "Overview":
             "Avg Fare ($)": "${:.2f}",
             "$/Hour": "${:.2f}",
         }),
-        use_container_width=True,
+        width='stretch',
         hide_index=True,
     )
 
@@ -136,7 +136,7 @@ if page == "Overview":
         legend=dict(orientation="h", y=1.1),
         height=380,
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -159,7 +159,7 @@ elif page == "Earnings":
     )
     fig.update_traces(fill="tozeroy", line_width=2)
     fig.update_layout(height=360)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     col1, col2 = st.columns(2)
 
@@ -172,7 +172,7 @@ elif page == "Earnings":
             labels={"month": "", "trips": "Trips"},
         )
         fig2.update_layout(height=300)
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width='stretch')
 
     with col2:
         # Avg fare per month
@@ -184,7 +184,7 @@ elif page == "Earnings":
             markers=True,
         )
         fig3.update_layout(height=300)
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, width='stretch')
 
     # Commission breakdown by year
     st.subheader("Gross vs Net by Year (Uber Commission Breakdown)")
@@ -202,7 +202,7 @@ elif page == "Earnings":
             yaxis_title="USD", height=320,
             legend=dict(orientation="h", y=1.1),
         )
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig4, width='stretch')
 
     with col2:
         st.markdown("<br><br>", unsafe_allow_html=True)
@@ -219,7 +219,7 @@ elif page == "Earnings":
                 "Tips": "${:.0f}", "Net": "${:.0f}",
             }),
             hide_index=True,
-            use_container_width=True,
+            width='stretch',
         )
 
 
@@ -246,7 +246,7 @@ elif page == "Trips":
         aspect="auto", template="plotly_dark",
     )
     fig.update_layout(height=320, coloraxis_colorbar=dict(title="Avg $"))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     col1, col2 = st.columns(2)
 
@@ -262,7 +262,7 @@ elif page == "Trips":
         )
         fig2.update_traces(texttemplate="$%{text}", textposition="outside")
         fig2.update_layout(height=340, yaxis_title="Earnings per Hour ($)")
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width='stretch')
 
     with col2:
         # Surge
@@ -278,7 +278,7 @@ elif page == "Trips":
         )
         fig3.update_traces(textinfo="label+percent")
         fig3.update_layout(height=340, showlegend=False)
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, width='stretch')
 
         surge_row = surge[surge["is_surged"] == True]
         if not surge_row.empty:
@@ -309,7 +309,7 @@ elif page == "Trips":
             )
             fig.update_traces(texttemplate="%{text:.1f}", textposition="outside")
             fig.update_layout(height=280, showlegend=False, title=title)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -343,7 +343,7 @@ elif page == "Ratings & Tips":
         )
         fig.update_traces(texttemplate="%{text}%", textposition="outside")
         fig.update_layout(height=300, xaxis=dict(tickmode="linear"))
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     with col2:
         st.subheader("Tips Summary")
@@ -367,7 +367,7 @@ elif page == "Ratings & Tips":
         )
         fig2.update_traces(texttemplate="$%{text:.0f}", textposition="outside")
         fig2.update_layout(height=300, xaxis_title="Year", yaxis_title="Tips ($)")
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width='stretch')
 
     st.markdown("---")
     st.caption(
