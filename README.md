@@ -5,6 +5,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 ![Plotly](https://img.shields.io/badge/Plotly-6.7-3F4F75?logo=plotly&logoColor=white)
+![Keepalive](https://github.com/evgeniimatveev/uber-driver-analytics/actions/workflows/keepalive.yml/badge.svg)
 
 Real-world analytics built on **3 years of personal Uber driver data** — 3,448 completed trips across Los Angeles (2022–2025).
 
@@ -190,6 +191,19 @@ uber-driver-analytics/
 - **Analytics** — cohort analysis (year-over-year), segmentation (distance buckets, surge/regular)
 - **Visualization** — Streamlit multi-page app, Plotly heatmaps, area charts, donut charts
 - **DevOps** — Docker containerization, Supabase cloud DB, environment secrets management
+
+---
+
+## Availability
+
+The live app is kept alive by a dual keepalive system:
+
+| Service | Schedule | Purpose |
+|---------|----------|---------|
+| GitHub Actions (`.github/workflows/keepalive.yml`) | Every 30 min | Pings Streamlit, visible as CI badge |
+| cron-job.org | Every 30 min | Backup ping, LA timezone |
+
+Both prevent Streamlit Cloud from sleeping and keep Supabase active via regular DB queries.
 
 ---
 
