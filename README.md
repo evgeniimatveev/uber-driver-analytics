@@ -5,13 +5,13 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 ![Plotly](https://img.shields.io/badge/Plotly-6.7-3F4F75?logo=plotly&logoColor=white)
-![Keepalive](https://github.com/evgeniimatveev/uber-driver-analytics/actions/workflows/keepalive.yml/badge.svg)
+[![HuggingFace](https://img.shields.io/badge/🤗_HuggingFace-Spaces-FFD21E?logo=huggingface&logoColor=black)](https://evgeniimatveevusa-uber-driver-analytics.hf.space)
 
 Real-world analytics built on **3 years of personal Uber driver data** — 3,448 completed trips across Los Angeles (2022–2025).
 
 > "I analyzed my own business to find where the real money was."
 
-**[Live Demo →](https://evgeniimatveev--uber-driver-analytics-dashboardapp-b7whst.streamlit.app/)**
+**[Live Demo → HuggingFace Spaces](https://evgeniimatveevusa-uber-driver-analytics.hf.space)**
 
 ---
 
