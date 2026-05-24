@@ -11,8 +11,11 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from dashboard import db
+try:
+    import db  # HuggingFace Spaces
+except ImportError:
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from dashboard import db
 
 # ── Page config ───────────────────────────────────────────────────────────────
 
