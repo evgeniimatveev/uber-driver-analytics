@@ -24,7 +24,7 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
 
-          git clone https://evgeniimatveev:$HF_TOKEN@huggingface.co/spaces/evgeniimatveev/uber-driver-analytics hf_space
+          git clone https://evgeniimatveevusa:$HF_TOKEN@huggingface.co/spaces/evgeniimatveevusa/uber-driver-analytics hf_space
 
           cp Dockerfile hf_space/Dockerfile
           cp requirements.txt hf_space/requirements.txt
