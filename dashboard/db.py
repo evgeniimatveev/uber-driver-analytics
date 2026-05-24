@@ -15,6 +15,12 @@ _engine = None
 
 
 def _get_db_url() -> str:
+    # HuggingFace Spaces / Railway / Render — single DATABASE_URL env var
+    url = os.getenv("DATABASE_URL")
+    if url:
+        return url.replace("postgres://", "postgresql+psycopg2://", 1).replace(
+            "postgresql://", "postgresql+psycopg2://", 1
+        )
     # Streamlit Cloud: reads from st.secrets
     try:
         import streamlit as st
