@@ -6,6 +6,7 @@ on:
     paths:
       - "dashboard/**"
       - "requirements.txt"
+      - "Dockerfile"
   workflow_dispatch:
 
 jobs:
@@ -25,24 +26,21 @@ jobs:
 
           git clone https://evgeniimatveev:$HF_TOKEN@huggingface.co/spaces/evgeniimatveev/uber-driver-analytics hf_space
 
-          cp dashboard/app.py hf_space/app.py
-          cp dashboard/db.py hf_space/db.py
+          cp Dockerfile hf_space/Dockerfile
           cp requirements.txt hf_space/requirements.txt
+          cp -r dashboard hf_space/dashboard
 
-          if [ ! -f hf_space/README.md ]; then
-            {
-              echo '---'
-              echo 'title: Uber Driver Analytics'
-              echo 'emoji: 🚗'
-              echo 'colorFrom: black'
-              echo 'colorTo: yellow'
-              echo 'sdk: streamlit'
-              echo 'sdk_version: 1.57.0'
-              echo 'app_file: app.py'
-              echo 'pinned: true'
-              echo '---'
-            } > hf_space/README.md
-          fi
+          {
+            echo '---'
+            echo 'title: Uber Driver Analytics'
+            echo 'emoji: 🚗'
+            echo 'colorFrom: black'
+            echo 'colorTo: yellow'
+            echo 'sdk: docker'
+            echo 'app_port: 8501'
+            echo 'pinned: true'
+            echo '---'
+          } > hf_space/README.md
 
           cd hf_space
           git add -A
