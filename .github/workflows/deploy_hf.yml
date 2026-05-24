@@ -34,7 +34,7 @@ jobs:
             echo '---'
             echo 'title: Uber Driver Analytics'
             echo 'emoji: 🚗'
-            echo 'colorFrom: black'
+            echo 'colorFrom: gray'
             echo 'colorTo: yellow'
             echo 'sdk: docker'
             echo 'app_port: 8501'
