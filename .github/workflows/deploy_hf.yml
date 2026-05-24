@@ -1,0 +1,50 @@
+name: Deploy to HuggingFace Spaces
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dashboard/**"
+      - "requirements.txt"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Push to HuggingFace Spaces
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+          git clone https://evgeniimatveev:$HF_TOKEN@huggingface.co/spaces/evgeniimatveev/uber-driver-analytics hf_space
+
+          cp dashboard/app.py hf_space/app.py
+          cp dashboard/db.py hf_space/db.py
+          cp requirements.txt hf_space/requirements.txt
+
+          if [ ! -f hf_space/README.md ]; then
+            {
+              echo '---'
+              echo 'title: Uber Driver Analytics'
+              echo 'emoji: 🚗'
+              echo 'colorFrom: black'
+              echo 'colorTo: yellow'
+              echo 'sdk: streamlit'
+              echo 'sdk_version: 1.57.0'
+              echo 'app_file: app.py'
+              echo 'pinned: true'
+              echo '---'
+            } > hf_space/README.md
+          fi
+
+          cd hf_space
+          git add -A
+          git diff --staged --quiet || git commit -m "Deploy from GitHub $COMMIT_SHA"
+          git push
