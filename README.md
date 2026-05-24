@@ -73,7 +73,7 @@ Real-world analytics built on **3 years of personal Uber driver data** — 3,448
 | Ingestion | Python + pandas + REST API |
 | Dashboard | Streamlit + Plotly |
 | Containerization | Docker + Docker Compose |
-| Deployment | Streamlit Cloud |
+| Deployment | HuggingFace Spaces |
 
 ---
 
@@ -94,7 +94,7 @@ Real-world analytics built on **3 years of personal Uber driver data** — 3,448
 ### Option A — Docker (recommended)
 
 ```bash
-git clone https://github.com/evgenii-matveev/uber-driver-analytics.git
+git clone https://github.com/evgeniimatveev/uber-driver-analytics.git
 cd uber-driver-analytics
 cp .env.example .env        # fill in your Supabase credentials
 docker compose up
@@ -104,7 +104,7 @@ Open **http://localhost:8501**
 ### Option B — Python
 
 ```bash
-git clone https://github.com/evgenii-matveev/uber-driver-analytics.git
+git clone https://github.com/evgeniimatveev/uber-driver-analytics.git
 cd uber-driver-analytics
 
 pip install -r requirements.txt
@@ -196,15 +196,14 @@ uber-driver-analytics/
 
 ## Availability
 
-The live app is kept alive by a dual keepalive system:
+The live app runs on **HuggingFace Spaces** (Docker) — no sleep, no cold starts, always on.
 
-| Service | Schedule | Purpose |
-|---------|----------|---------|
-| GitHub Actions (`.github/workflows/keepalive.yml`) | Every 30 min | Pings Streamlit, visible as CI badge |
-| cron-job.org | Every 30 min | Backup ping, LA timezone |
-
-Both prevent Streamlit Cloud from sleeping and keep Supabase active via regular DB queries.
-
+| Layer | Detail |
+|-------|--------|
+| Hosting | HuggingFace Spaces (Docker SDK) |
+| Auto-deploy | GitHub Actions on every push to dashboard/ |
+| Uptime | 24/7 — HF Spaces does not sleep |
+| Database | Supabase (PostgreSQL) via HF Space secrets |
 ---
 
 *Data: personal Uber driver export · Los Angeles, CA · May 2022 – May 2025*
