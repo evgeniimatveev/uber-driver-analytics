@@ -1,17 +1,54 @@
-# Uber Driver Analytics Dashboard
+# I Drove Uber for 3 Years. Then I Analyzed It.
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.57-FF4B4B?logo=streamlit&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?logo=postgresql&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.57-FF4B4B?logo=streamlit&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 ![Plotly](https://img.shields.io/badge/Plotly-6.7-3F4F75?logo=plotly&logoColor=white)
 ![Keepalive](https://github.com/evgeniimatveev/uber-driver-analytics/actions/workflows/keepalive.yml/badge.svg)
 
-Real-world analytics built on **3 years of personal Uber driver data** — 3,448 completed trips across Los Angeles (2022–2025).
+**3,448 trips. $70,768 earned. $31,323 taken by Uber. One question: where was the real money?**
 
-> "I analyzed my own business to find where the real money was."
+**[Live Demo → Streamlit Cloud](https://evgeniimatveev--uber-driver-analytics-dashboardapp-b7whst.streamlit.app/)**
 
-**[Live Demo →](https://evgeniimatveev--uber-driver-analytics-dashboardapp-b7whst.streamlit.app/)**
+---
+
+## The Story
+
+From May 2022 to May 2025, I drove Uber full-time across Los Angeles while building my data engineering skills on the side. Every trip, every surge, every 5-star rating — all logged by Uber's system.
+
+At some point I realized: I was sitting on 3 years of personal business data and had never actually analyzed it. So I requested my full export, built an ingestion pipeline, modeled it in PostgreSQL, and turned it into a dashboard. What I found surprised me.
+
+---
+
+## What I Found
+
+**Short trips pay more than long ones** — 0–2 mile trips average $118/hr. Trips over 20 miles drop to $80/hr. Uber's minimum fare kicks in on shorts, and you fit more of them per hour. Counterintuitive until you do the math.
+
+**Halloween > New Year's Eve** — October 28, 2023 was my single best day: $418, 10 surge trips. January 1st had the highest avg fare per trip ($45) but fewer trips overall. Event volume beats event pricing.
+
+**Uber took $14,303 in commission — then paid back $6,362 in incentives** — net commission burden after incentives: ~18%, not the 32.3% gross rate. The incentive programs partially offset what looks like an aggressive take rate.
+
+**I earned 54% more per hour in 2025 than 2022** — $68/hr → $105/hr, while avg trip distance dropped. Shorter trips, smarter routing, better surge timing.
+
+**98.9% of my ratings were 5-star** — 1,669 rated trips, 1,651 at 5 stars. Not a vanity metric — high ratings unlock better surge zones and priority dispatch in LA.
+
+---
+
+## The Numbers
+
+| Metric | Value |
+|--------|-------|
+| Total gross earned | **$70,768** |
+| Net after commission | **$39,445** |
+| Uber's gross take rate | **32.3%** |
+| Net take rate (after incentives) | **~18%** |
+| Avg earnings per hour | **$87/hr gross** |
+| Best trip type | Short 0–2 mi → **$118/hr** |
+| 5-star rating rate | **98.9%** (1,669 ratings) |
+| Surge trips | **231 trips · $1,531 earned** |
+| Best single day | **Oct 28 2023 → $418** |
+| $/hr growth 2022–2025 | **$68 → $105 (+54%)** |
 
 ---
 
@@ -47,30 +84,24 @@ Real-world analytics built on **3 years of personal Uber driver data** — 3,448
 
 ---
 
-## Key Findings
+## How It Works
 
-| Metric | Value |
-|--------|-------|
-| Total gross earned | **$70,768** |
-| Net after Uber commission | **$39,445** |
-| Uber commission rate | **32.3%** of gross |
-| Avg earnings per hour | **$87/hr** gross |
-| Best trip type ($/hr) | Short trips 0–2 mi → **$118/hr** |
-| 5-star rating rate | **98.9%** (1,669 ratings) |
-| Surge bonus earned | **$1,531** across 231 trips (6.7%) |
-| Best single day | Oct 28 2023 (Halloween eve) → **$418** |
-| $/hr growth 2022→2025 | **$68 → $105** (+54%) |
-| Incentives vs commission | Uber took $14,303 · paid back $6,362 (44%) |
-
----
-
-## Tech Stack
+```
+Uber CSV export (3 files · personal data)
+        ↓  Python ingestion
+   Supabase (PostgreSQL cloud)
+        ↓  SQL query layer (12 analytical scripts)
+   Dashboard (4 pages · Plotly)
+        ↓  Docker
+   Streamlit Cloud (keepalive via GitHub Actions)
+```
 
 | Layer | Tool |
 |-------|------|
 | Data source | Uber driver CSV export (personal) |
 | Database | Supabase (PostgreSQL cloud) |
 | Ingestion | Python + pandas + REST API |
+| Analytics | 12 SQL scripts — window functions, CTEs, cohort analysis |
 | Dashboard | Streamlit + Plotly |
 | Containerization | Docker + Docker Compose |
 | Deployment | Streamlit Cloud |
@@ -79,22 +110,22 @@ Real-world analytics built on **3 years of personal Uber driver data** — 3,448
 
 ## Dashboard Pages
 
-**Overview** — 8 KPI cards + year-over-year table + "Where the Money Goes" stacked bar
+**Overview** — 8 KPI cards · year-over-year comparison · "Where the Money Goes" stacked bar
 
-**Earnings** — Monthly timeline · Trips per month · Avg fare trend · Commission breakdown by year
+**Earnings** — Monthly gross/net timeline · trips per month · avg fare trend · commission breakdown by year
 
-**Trips** — Hour × day heatmap · Distance bucket analysis · Surge vs regular · Airport vs regular
+**Trips** — Hour × weekday heatmap · distance bucket analysis ($/hr by range) · surge vs regular · airport vs regular
 
-**Ratings & Tips** — 5-star distribution · Tips by year
+**Ratings & Tips** — 5-star distribution · tips by year
 
 ---
 
 ## Quick Start
 
-### Option A — Docker (recommended)
+### Option A — Docker
 
 ```bash
-git clone https://github.com/evgenii-matveev/uber-driver-analytics.git
+git clone https://github.com/evgeniimatveev/uber-driver-analytics.git
 cd uber-driver-analytics
 cp .env.example .env        # fill in your Supabase credentials
 docker compose up
@@ -104,37 +135,27 @@ Open **http://localhost:8501**
 ### Option B — Python
 
 ```bash
-git clone https://github.com/evgenii-matveev/uber-driver-analytics.git
+git clone https://github.com/evgeniimatveev/uber-driver-analytics.git
 cd uber-driver-analytics
-
 pip install -r requirements.txt
-
-cp .env.example .env        # fill in your Supabase credentials
-
+cp .env.example .env
 python -m streamlit run dashboard/app.py
 ```
 
 ---
 
-## Load Your Own Data
+## Run It With Your Own Data
 
-To run this with your own Uber export:
+Uber drivers can export their full trip history at [Uber Help → Request Your Data](https://help.uber.com/driving-and-delivering/article/request-your-data).
 
-1. **Request your data** at [Uber Help → Request Your Data](https://help.uber.com/driving-and-delivering/article/request-your-data)
-2. **Place CSVs** in `data/` folder:
+1. Place the 3 CSVs in `data/`:
    - `driver_lifetime_trips.csv`
    - `driver_payments.csv`
    - `driver_lifetime_ratings_received.csv`
-3. **Create a free Supabase project** at [supabase.com](https://supabase.com)
-4. **Run schema** — paste `sql/schema.sql` into Supabase SQL Editor and execute
-5. **Load data:**
-   ```bash
-   python ingestion/load_supabase.py
-   ```
-6. **Launch dashboard:**
-   ```bash
-   python -m streamlit run dashboard/app.py
-   ```
+2. Create a free project at [supabase.com](https://supabase.com)
+3. Run `sql/schema.sql` in Supabase SQL Editor
+4. Load data: `python ingestion/load_supabase.py`
+5. Launch: `python -m streamlit run dashboard/app.py`
 
 ---
 
@@ -147,13 +168,11 @@ uber-driver-analytics/
 │   ├── schema.sql           # PostgreSQL table definitions
 │   └── analysis/            # 12 analytical SQL scripts
 ├── ingestion/
-│   ├── load_data.py         # CSV → local PostgreSQL pipeline
+│   ├── load_data.py         # CSV → local PostgreSQL
 │   └── load_supabase.py     # CSV → Supabase via REST API
 ├── dashboard/
 │   ├── app.py               # Streamlit app (4 pages)
 │   └── db.py                # SQL query layer
-├── .streamlit/
-│   └── secrets.toml.example
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
@@ -166,45 +185,21 @@ uber-driver-analytics/
 
 | Table | Rows | Description |
 |-------|------|-------------|
-| `trips` | 3,745 | Every trip — timestamps, fares, distance, flags |
+| `trips` | 3,745 | Every trip — timestamps, fares, distance, surge flag |
 | `payments` | 21,112 | Per-trip payment breakdown by category |
 | `ratings` | 1,669 | 5-star ratings received |
 
 ---
 
-## Insights That Surprised Me
-
-**Short trips pay more per hour** — 0–2 mile trips earn $118/hr vs $80/hr for 20+ mile trips. Uber's minimum fare kicks in, and you fit more trips per hour.
-
-**Halloween weekend > New Year's** — Oct 28 2023 was the single best day ($418, 10 surge trips). Jan 1 had the highest avg fare ($45/trip) but fewer trips.
-
-**Incentives recovered 44% of commission** — Uber took $14,303 in commission but paid back $6,362 in driver incentives. Net commission burden: ~18%.
-
-**$/hr grew 54% in 3 years** — from $68/hr in 2022 to $105/hr in 2025, while avg trip distance dropped (shorter trips, smarter routing).
-
----
-
-## Skills Demonstrated
-
-- **SQL** — window functions, CTEs, date/timezone handling, aggregations
-- **Data Engineering** — CSV ingestion pipeline, schema design, indexing strategy
-- **Analytics** — cohort analysis (year-over-year), segmentation (distance buckets, surge/regular)
-- **Visualization** — Streamlit multi-page app, Plotly heatmaps, area charts, donut charts
-- **DevOps** — Docker containerization, Supabase cloud DB, environment secrets management
-
----
-
 ## Availability
 
-The live app is kept alive by a dual keepalive system:
+Kept alive by a dual keepalive system — no cold starts, always on:
 
 | Service | Schedule | Purpose |
 |---------|----------|---------|
-| GitHub Actions (`.github/workflows/keepalive.yml`) | Every 30 min | Pings Streamlit, visible as CI badge |
+| GitHub Actions | Every 30 min | Pings Streamlit app, visible as CI badge |
 | cron-job.org | Every 30 min | Backup ping, LA timezone |
-
-Both prevent Streamlit Cloud from sleeping and keep Supabase active via regular DB queries.
 
 ---
 
-*Data: personal Uber driver export · Los Angeles, CA · May 2022 – May 2025*
+*Personal Uber driver data · Los Angeles, CA · May 2022 – May 2025 · Built by Evgenii Matveev*
