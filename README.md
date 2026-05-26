@@ -200,13 +200,6 @@ uber-driver-analytics/
 | Uptime | 24/7 — HF Spaces does not sleep |
 | Database | Supabase (PostgreSQL) via HF Space secrets |
 | Keepalive | GitHub Actions every 30 min · cron-job.org backup |
-
-| Layer | Detail |
-|-------|--------|
-| Hosting | HuggingFace Spaces (Docker SDK) |
-| Auto-deploy | GitHub Actions on every push to dashboard/ |
-| Uptime | 24/7 — HF Spaces does not sleep |
-| Database | Supabase (PostgreSQL) via HF Space secrets |
 ---
 
 *Personal Uber driver data · Los Angeles, CA · May 2022 – May 2025 · Built by Evgenii Matveev*
