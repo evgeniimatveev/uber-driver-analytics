@@ -5,11 +5,12 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.57-FF4B4B?logo=streamlit&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 ![Plotly](https://img.shields.io/badge/Plotly-6.7-3F4F75?logo=plotly&logoColor=white)
+[![HuggingFace](https://img.shields.io/badge/🤗_HuggingFace-Spaces-FFD21E?logo=huggingface&logoColor=black)](https://evgeniimatveevusa-uber-driver-analytics.hf.space)
 ![Keepalive](https://github.com/evgeniimatveev/uber-driver-analytics/actions/workflows/keepalive.yml/badge.svg)
 
 **3,448 trips. $70,768 earned. $31,323 taken by Uber. One question: where was the real money?**
 
-**[Live Demo → Streamlit Cloud](https://evgeniimatveev--uber-driver-analytics-dashboardapp-b7whst.streamlit.app/)**
+**[Live Demo → HuggingFace Spaces](https://evgeniimatveevusa-uber-driver-analytics.hf.space)**
 
 ---
 
@@ -93,7 +94,7 @@ Uber CSV export (3 files · personal data)
         ↓  SQL query layer (12 analytical scripts)
    Dashboard (4 pages · Plotly)
         ↓  Docker
-   Streamlit Cloud (keepalive via GitHub Actions)
+   HuggingFace Spaces (always-on)
 ```
 
 | Layer | Tool |
@@ -104,7 +105,7 @@ Uber CSV export (3 files · personal data)
 | Analytics | 12 SQL scripts — window functions, CTEs, cohort analysis |
 | Dashboard | Streamlit + Plotly |
 | Containerization | Docker + Docker Compose |
-| Deployment | Streamlit Cloud |
+| Deployment | HuggingFace Spaces (Docker SDK) |
 
 ---
 
@@ -193,12 +194,12 @@ uber-driver-analytics/
 
 ## Availability
 
-Kept alive by a dual keepalive system — no cold starts, always on:
-
-| Service | Schedule | Purpose |
-|---------|----------|---------|
-| GitHub Actions | Every 30 min | Pings Streamlit app, visible as CI badge |
-| cron-job.org | Every 30 min | Backup ping, LA timezone |
+| Layer | Detail |
+|-------|--------|
+| Hosting | HuggingFace Spaces (Docker SDK) |
+| Uptime | 24/7 — HF Spaces does not sleep |
+| Database | Supabase (PostgreSQL) via HF Space secrets |
+| Keepalive | GitHub Actions every 30 min · cron-job.org backup |
 
 ---
 
