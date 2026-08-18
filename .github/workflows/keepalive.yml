@@ -1,7 +1,9 @@
 name: Keepalive Ping
 
 on:
-  workflow_dispatch:  # manual only — HuggingFace Spaces does not sleep
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'  # every hour
 
 jobs:
   ping:
@@ -10,7 +12,7 @@ jobs:
       - name: Ping HuggingFace Space
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" --location \
-            https://evgeniimatveev-uber-driver-analytics.hf.space/)
+            https://evgeniimatveevusa-uber-driver-analytics.hf.space/)
           echo "HTTP status: $STATUS"
           if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 400 ]; then
             echo "App is alive at HuggingFace Spaces"
