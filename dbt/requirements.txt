@@ -1,1 +1,2 @@
-dbt-postgres~=1.9
+dbt-core~=1.12.0
+dbt-postgres~=1.11.0
