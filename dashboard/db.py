@@ -41,7 +41,7 @@ def _get_db_url() -> str:
 def get_engine():
     global _engine
     if _engine is None:
-        _engine = create_engine(_get_db_url())
+        _engine = create_engine(_get_db_url(), pool_pre_ping=True, pool_recycle=240)
     return _engine
 
 
