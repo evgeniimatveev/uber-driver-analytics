@@ -1,0 +1,67 @@
+name: dbt on Neon branch (PR)
+
+# Every PR that touches dbt/ gets its own copy-on-write Neon branch of production,
+# runs `dbt build` (models + tests) against it, then deletes the branch.
+# Production data is never written to.
+
+on:
+  pull_request:
+    paths:
+      - "dbt/**"
+      - ".github/workflows/dbt-neon-pr.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dbt-neon-pr-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  dbt-build:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: preview/pr-${{ github.event.number }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Create Neon branch from production
+        id: branch
+        uses: neondatabase/create-branch-action@v6
+        with:
+          project_id: ${{ vars.NEON_PROJECT_ID }}
+          api_key: ${{ secrets.NEON_API_KEY }}
+          branch_name: ${{ env.BRANCH_NAME }}
+          role: neondb_owner
+          database: neondb
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install dbt
+        run: pip install -r dbt/requirements.txt
+
+      - name: dbt build (models + tests)
+        working-directory: dbt
+        env:
+          DBT_HOST: ${{ steps.branch.outputs.db_host }}
+          DBT_PASSWORD: ${{ steps.branch.outputs.password }}
+          DBT_PROFILES_DIR: .
+        run: |
+          set -o pipefail
+          dbt build 2>&1 | tee build.log
+          {
+            echo "### dbt build on Neon branch \`$BRANCH_NAME\`"
+            echo '```'
+            tail -n 15 build.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Delete Neon branch
+        if: always()
+        uses: neondatabase/delete-branch-action@v3
+        with:
+          project_id: ${{ vars.NEON_PROJECT_ID }}
+          api_key: ${{ secrets.NEON_API_KEY }}
+          branch: ${{ env.BRANCH_NAME }}

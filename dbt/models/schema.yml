@@ -1,0 +1,36 @@
+version: 2
+models:
+  - name: stg_trips
+    columns:
+      - name: trip_id
+        tests: [unique, not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              arguments:
+                values: [completed, rider_canceled, driver_canceled]
+      - name: request_at
+        tests: [not_null]
+  - name: stg_payments
+    columns:
+      - name: payment_id
+        tests: [unique, not_null]
+      - name: category
+        tests: [not_null]
+  - name: stg_ratings
+    columns:
+      - name: stars
+        tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+  - name: mart_monthly_trips
+    columns:
+      - name: month
+        tests: [unique, not_null]
+      - name: completed_trips
+        tests: [not_null]
+  - name: mart_payment_breakdown
+    columns:
+      - name: category
+        tests: [unique, not_null]

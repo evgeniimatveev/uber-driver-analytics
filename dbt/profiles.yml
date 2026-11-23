@@ -1,0 +1,15 @@
+# Connection comes from env vars so the same profile works locally and in CI
+# (CI points it at a throwaway Neon branch, never at production).
+uber:
+  target: default
+  outputs:
+    default:
+      type: postgres
+      host: "{{ env_var('DBT_HOST') }}"
+      user: "{{ env_var('DBT_USER', 'neondb_owner') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
+      dbname: "{{ env_var('DBT_DBNAME', 'neondb') }}"
+      port: 5432
+      schema: public
+      threads: 4
+      sslmode: require
