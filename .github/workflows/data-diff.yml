@@ -1,0 +1,25 @@
+name: Data diff (PR)
+
+on:
+  pull_request:
+    paths:
+      - "dbt/**"
+      - ".github/workflows/data-diff.yml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: data-diff-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  data-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: evgeniimatveev/neon-data-diff@main
+        with:
+          neon-api-key: ${{ secrets.NEON_API_KEY }}
+          neon-project-id: ${{ vars.NEON_PROJECT_ID }}
