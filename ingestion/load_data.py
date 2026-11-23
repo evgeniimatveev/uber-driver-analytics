@@ -16,10 +16,16 @@ from sqlalchemy import create_engine, text
 
 load_dotenv()
 
-DB_URL = (
-    f"postgresql+psycopg2://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-)
+_url = os.getenv("DATABASE_URL")
+if _url:  # Neon / any single-URL provider
+    DB_URL = _url.replace("postgres://", "postgresql+psycopg2://", 1).replace(
+        "postgresql://", "postgresql+psycopg2://", 1
+    )
+else:
+    DB_URL = (
+        f"postgresql+psycopg2://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+        f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+    )
 
 DATA_DIR = Path(__file__).parent.parent / "data"
 SCHEMA_FILE = Path(__file__).parent.parent / "sql" / "schema.sql"
