@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 try:
-    import db  # HuggingFace Spaces
+    import db  # deployed layout (dashboard/ is the app root)
 except ImportError:
     sys.path.insert(0, str(Path(__file__).parent.parent))
     from dashboard import db

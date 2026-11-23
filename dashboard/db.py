@@ -15,7 +15,7 @@ _engine = None
 
 
 def _get_db_url() -> str:
-    # HuggingFace Spaces / Railway / Render — single DATABASE_URL env var
+    # Neon / Streamlit Cloud secret / Railway / Render — single DATABASE_URL
     url = os.getenv("DATABASE_URL")
     if url:
         return url.replace("postgres://", "postgresql+psycopg2://", 1).replace(
@@ -41,7 +41,7 @@ def _get_db_url() -> str:
 def get_engine():
     global _engine
     if _engine is None:
-        _engine = create_engine(_get_db_url())
+        _engine = create_engine(_get_db_url(), pool_pre_ping=True, pool_recycle=240)
     return _engine
 
 
