@@ -195,6 +195,8 @@ The `dbt/` folder models the raw tables into staging views and two marts (`mart_
 
 Every pull request that touches `dbt/` gets its own **copy-on-write Neon branch** of production. GitHub Actions runs `dbt build` on that branch and then deletes it, so production is never written to.
 
+A second check, [neon-data-diff](https://github.com/evgeniimatveev/neon-data-diff), runs the dbt project for the base code and for the PR code on the same branch and comments what changed in the data, even when every test passes.
+
 The first run caught a real data defect: 26 payments (about $18) have an empty `category` in Uber's export. They are now labelled `uncategorized` instead of being dropped, so totals still reconcile.
 
 ---
