@@ -1,0 +1,28 @@
+name: Data diff (PR)
+
+# On every PR that touches dbt/: build the models for the base code and the PR code
+# on a throwaway Neon branch and comment what changed in the data (even if tests pass).
+
+on:
+  pull_request:
+    paths:
+      - "dbt/**"
+      - ".github/workflows/data-diff.yml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: data-diff-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  data-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: evgeniimatveev/neon-data-diff@v0
+        with:
+          neon-api-key: ${{ secrets.NEON_API_KEY }}
+          neon-project-id: ${{ vars.NEON_PROJECT_ID }}

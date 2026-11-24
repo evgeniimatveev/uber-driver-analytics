@@ -10,6 +10,6 @@ uber:
       password: "{{ env_var('DBT_PASSWORD') }}"
       dbname: "{{ env_var('DBT_DBNAME', 'neondb') }}"
       port: 5432
-      schema: public
+      schema: "{{ env_var('DBT_SCHEMA', 'public') }}"
       threads: 4
       sslmode: require
